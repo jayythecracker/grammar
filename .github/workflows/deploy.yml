@@ -14,8 +14,13 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
+          flutter-version: '3.29.3'  # Updated to match the recommended version
           channel: 'stable'
+      
+      - name: Check Flutter and Dart versions
+        run: |
+          flutter --version
+          dart --version
       
       - name: Enable Flutter web
         run: flutter config --enable-web
@@ -23,11 +28,9 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
         
-      - name: Build web
-        run: flutter build web --release --base-href=/grammar_checker_clean/
-
+      # Only build once with the environment variables
       - name: Build web with environment variables
-        run: flutter build web --release --base-href=/grammar_checker_clean/ --dart-define=OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}  
+        run: flutter build web --release --base-href=/grammar_checker_clean/ --dart-define=OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
       
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
